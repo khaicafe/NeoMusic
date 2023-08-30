@@ -47,6 +47,7 @@ mainWindow.on('close', function (event) {
 });
 mainWindow.setMenu(null)
 mainWindow.setMenuBarVisibility(false)
+mainWindow.resizable = false;
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 }
