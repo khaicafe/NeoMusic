@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "author": "khaicafe",
   "scripts": {
-    "start": "unset NODE_OPTIONS && electron-forge start",
+    "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
