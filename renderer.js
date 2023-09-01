@@ -7,14 +7,14 @@
  */
 //////////////////////////////////////////////// music /////////////////////////////////////////////////
 var _next = 0,
-files,
-len,
-timerInterval;
-const axios = require('axios')
-const myAudio = document.querySelector('audio#music');
-const instance = axios.create({
-    baseURL: "https://cdn.neocafe.tech/media/music/playlist/metadata.json",
-})
+      files,
+      len,
+   timerInterval;
+   const axios = require('axios')
+  const myAudio = document.querySelector('audio#music');
+  const instance = axios.create({
+      baseURL: "https://cdn.neocafe.tech/media/music/playlist/metadata.json",
+  })
 var checkbox = document.querySelector("input[name=music]");
 const fs = require("fs");
 const path = require('path')
@@ -82,191 +82,206 @@ checkbox.addEventListener('change', function() {
   fs.writeFileSync(filePath, jsonData, 'utf-8');
 });
 
-async function next(n) {
-  if(typeof files[n] !== 'undefined'){
-    console.log('file', files[n].url)
-    myAudio.setAttribute("src", files[n].url);
-    document.getElementById('nameMusic').innerHTML = files[n].name;
-    play()
-    // window.addEventListener('click', () => {
-    //  play()
-    // }, { once: true })
-  } else {
-    console.log('lỗi file', files.length)
-    for (var i = _next; i < files.length; i++) {
-      if(typeof files[i] !== 'undefined'){
-        _next = i
-        console.log('chekc file', files[i])
-        myAudio.setAttribute("src", files[_next].url);
-        document.getElementById('nameMusic').innerHTML = files[_next].name;
+
+  
+    async function next(n) {
+      if(typeof files[n] !== 'undefined'){
+        console.log('file', files[n].url)
+        myAudio.setAttribute("src", files[n].url);
+        document.getElementById('nameMusic').innerHTML = files[n].name;
         play()
-        break;
+        // window.addEventListener('click', () => {
+        //  play()
+        // }, { once: true })
+      } else {
+        console.log('lỗi file', files.length)
+        for (var i = _next; i < files.length; i++) {
+          if(typeof files[i] !== 'undefined'){
+            _next = i
+            console.log('chekc file', files[i])
+            myAudio.setAttribute("src", files[_next].url);
+            document.getElementById('nameMusic').innerHTML = files[_next].name;
+            play()
+            break;
+          }
+        }
+
       }
     }
 
-  }
-}
-async function nextMusic() {
-  len = files.length;
-    // Tiếp tục chạy bài khác ở đây
-    if (len-1 == _next) {
-    _next = 0;
-  } else {
-    _next += 1;
-    console.log(len, _next);
-  }
-  myAudio.setAttribute("src", files[_next].url);
-  document.getElementById('nameMusic').innerHTML = files[_next].name;
-  myAudio.play();
-  console.log(_next);
-}
-async function preMusic() {
-  len = files.length;
-    // Tiếp tục chạy bài khác ở đây
-    if (_next == 0) {
-      _next = len-1;
-    } else {
-      _next -= 1;
-      console.log(len, _next);
-    }
-    myAudio.setAttribute("src", files[_next].url);
-    document.getElementById('nameMusic').innerHTML = files[_next].name;
-    myAudio.play();
-    console.log(_next);
-}
-
-  // btn play pause
-var btn_pause = document.getElementById('playpause');
-btn_pause.addEventListener("click", function (el) {
-  play()
-})
-// btn next
-var btn_pause = document.getElementById('nextMusic');
-btn_pause.addEventListener("click", function (el) {
-  nextMusic()
-})
-// btn preMusic
-var btn_pause = document.getElementById('preMusic');
-btn_pause.addEventListener("click", function (el) {
-      preMusic()
-    })
-myAudio.addEventListener('error', function() {
-    console.log('Lỗi: Không tìm thấy file audio');
-    // Tiếp tục chạy bài khác ở đây
-    if((len)==_next){
+    async function nextMusic() {
+      len = files.length;
+        // Tiếp tục chạy bài khác ở đây
+        if (len-1 == _next) {
         _next = 0;
-    } else {
+      } else {
         _next += 1;
         console.log(len, _next);
+      }
+      myAudio.setAttribute("src", files[_next].url);
+      document.getElementById('nameMusic').innerHTML = files[_next].name;
+      myAudio.play();
+      console.log(_next);
     }
-    next(_next);
-    console.log(_next)
+    async function preMusic() {
+      len = files.length;
+        // Tiếp tục chạy bài khác ở đây
+        if (_next == 0) {
+         _next = len-1;
+       } else {
+         _next -= 1;
+         console.log(len, _next);
+       }
+       myAudio.setAttribute("src", files[_next].url);
+       document.getElementById('nameMusic').innerHTML = files[_next].name;
+       myAudio.play();
+       console.log(_next);
+     }
+
+  
+     // btn play pause
+     var btn_pause = document.getElementById('playpause');
+    btn_pause.addEventListener("click", function (el) {
+      play()
+    })
+    // btn next
+    var btn_pause = document.getElementById('nextMusic');
+    btn_pause.addEventListener("click", function (el) {
+      nextMusic()
+    })
+    // btn preMusic
+    var btn_pause = document.getElementById('preMusic');
+    btn_pause.addEventListener("click", function (el) {
+         preMusic()
+       })
+    
+   
+    
+    
+    myAudio.addEventListener('error', function() {
+        console.log('Lỗi: Không tìm thấy file audio');
+        // Tiếp tục chạy bài khác ở đây
+        if((len)==_next){
+            _next = 0;
+        } else {
+            _next += 1;
+            console.log(len, _next);
+        }
+        next(_next);
+        console.log(_next)
+        });
+    myAudio.addEventListener("ended", function(){
+        _next += 1;
+        next(_next);
+        console.log(len, _next);
+        if((len-1)==_next){
+            _next = -1;
+        }
+        console.log(_next)
     });
-myAudio.addEventListener("ended", function(){
-    _next += 1;
-    next(_next);
-    console.log(len, _next);
-    if((len-1)==_next){
-        _next = -1;
+    async function shuffleArrayByKeyword(array, temp) {
+      const keyword = temp.toString();
+      console.log('random', keyword)
+     
+       // Tạo một mảng con chứa các phần tử có từ khóa
+        const keywordElements = array.filter(item => item.name.includes(keyword));
+
+        // Xáo trộn mảng con
+        // const shuffledElements = keywordElements.sort(() => Math.random() - 0.5);
+
+        // Tạo một mảng mới chứa các phần tử đã xáo trộn và các phần tử còn lại
+        const shuffledArray = array.map(item => {
+          if (item.name.includes(keyword)) {
+            return keywordElements.pop();
+          }
+          return item;
+        });
+
+        return shuffledArray;
+      }
+
+      
+    // Begin
+    // navigator.permissions.query({ name: 'microphone' })
+    // .then(function(permissionStatus) {
+    //   console.log('Permission state:', permissionStatus.state);
+    //   if (permissionStatus.state === 'granted') {
+    //     // Quyền truy cập đã được cấp
+    //     // Tiếp tục xử lý tại đây
+    //   } else if (permissionStatus.state === 'prompt') {
+    //     // Trình duyệt đang hiển thị cửa sổ xác nhận
+    //     // Người dùng chưa đưa ra quyết định
+    //     navigator.mediaDevices.getUserMedia({ audio: true })
+    //   } else {
+    //     // Quyền truy cập chưa được cấp
+    //     // Hiển thị thông báo hoặc xử lý tùy ý
+    //     navigator.mediaDevices.getUserMedia({ audio: true })
+    //   }
+    // })
+    // .catch(function(error) {
+    //   console.error('Error checking permission:', error);
+    // });
+
+    async function getListMusic () {
+      
+         // get list music
+        const res = await instance.get();
+        console.log('get list music', res.data)
+        files = res.data.items
+        len = files.length;
+        const currentDate = new Date();
+        const keyword = currentDate.getDate();
+        // console.log('key', keyword, currentDate)
+        const shuffledMusic = await shuffleArrayByKeyword(files, keyword);
+        files = shuffledMusic
+        console.log(shuffledMusic);
+        next(_next);
+        
     }
-    console.log(_next)
-});
-async function shuffleArrayByKeyword(array, temp) {
-  const keywork = temp/30
-  var currentIndex = array.length, temporaryValue, randomIndex;
-  console.log('random', currentIndex)
-  var arrlist = []
-  // While there remain elements to shuffle...
-  while ( currentIndex > 0) {
-    // Create a random index to pick from the original array
-    currentIndex -= 1;
-    randomIndex = Math.floor(keywork * currentIndex);
-    console.log('item music', randomIndex)
-    // Cache the value, and swap it with the current element
-    arrlist.push(array[randomIndex])
-    // console.log(array[randomIndex])
-  }
-  return arrlist;
-  }
-// Begin
-// navigator.permissions.query({ name: 'microphone' })
-// .then(function(permissionStatus) {
-//   console.log('Permission state:', permissionStatus.state);
-//   if (permissionStatus.state === 'granted') {
-//     // Quyền truy cập đã được cấp
-//     // Tiếp tục xử lý tại đây
-//   } else if (permissionStatus.state === 'prompt') {
-//     // Trình duyệt đang hiển thị cửa sổ xác nhận
-//     // Người dùng chưa đưa ra quyết định
-//     navigator.mediaDevices.getUserMedia({ audio: true })
-//   } else {
-//     // Quyền truy cập chưa được cấp
-//     // Hiển thị thông báo hoặc xử lý tùy ý
-//     navigator.mediaDevices.getUserMedia({ audio: true })
-//   }
-// })
-// .catch(function(error) {
-//   console.error('Error checking permission:', error);
-// });
-
-async function getListMusic () {
-    // get list music
-  const res = await instance.get();
-  console.log('get list music', res.data)
-  files = res.data.items
-  len = files.length;
-  const currentDate = new Date();
-  const keyword = currentDate.getDate();
-  // console.log('key', keyword)
-  const shuffledMusic = await shuffleArrayByKeyword(files, keyword);
-  files = shuffledMusic
-  console.log('list nhac random', shuffledMusic);
-  next(_next);
-}
-
-  //------------------------------------------
-function stopAnimation() {
-    var scrollText = document.querySelector('.now-playing-details');
-    scrollText.style.animationPlayState = 'paused';
-  }
-function playAnimation() {
-  var scrollText = document.querySelector('.now-playing-details');
-  scrollText.style.animationPlayState = 'running';
-}
-function play() {
-  // clearInterval(timerInterval)
-  var nowPlayingBoardId = document.getElementById("now-playing-board-id"); 
-  var nowPlayingBoardBottomBarId = document.getElementById("now-playing-board-bottom-bar-id");  
-  var vynlId = document.getElementById("vynl-id"); 
-  const myAudio = document.querySelector('audio#music');
-
-  if(document.getElementById("playpause").classList.contains("play-circle")){  
-    vynlId.classList.add("vynl-animation");
-    myAudio.play();
-    nowPlayingBoardId.style.transform="translatey(40px)";
-    // nowPlayingBoardBottomBarId.style.transform="translatey(20%)";
-    timerInterval = setTimeout(function () {
-      playAnimation()
-    }, 3000);
-    document.getElementById("playpause").classList.remove("play-circle");
-    document.getElementById("playpause").classList.add("pause-circle");
-  }
-  else if(document.getElementById("playpause").classList.contains("pause-circle")){    
-    vynlId.classList.remove("vynl-animation");
     
-    myAudio.pause();
-    stopAnimation()
-    timerInterval = setTimeout(function () {
-      nowPlayingBoardId.style.transform="translatey(10%)";
-      // nowPlayingBoardBottomBarId.style.transform="translatey(0%)";
-    }, 1000);
-    
-    
-    document.getElementById("playpause").classList.remove("pause-circle");
-    document.getElementById("playpause").classList.add("play-circle");
-  }
+     //------------------------------------------
+    function stopAnimation() {
+        var scrollText = document.querySelector('.now-playing-details');
+        scrollText.style.animationPlayState = 'paused';
+      }
+    function playAnimation() {
+      var scrollText = document.querySelector('.now-playing-details');
+      scrollText.style.animationPlayState = 'running';
+    }
+    function play() {
+      // clearInterval(timerInterval)
+      var nowPlayingBoardId = document.getElementById("now-playing-board-id"); 
+      var nowPlayingBoardBottomBarId = document.getElementById("now-playing-board-bottom-bar-id");  
+      var vynlId = document.getElementById("vynl-id"); 
+      const myAudio = document.querySelector('audio#music');
 
-}
+      if(document.getElementById("playpause").classList.contains("play-circle")){  
+        vynlId.classList.add("vynl-animation");
+        myAudio.play();
+        nowPlayingBoardId.style.transform="translatey(40px)";
+        // nowPlayingBoardBottomBarId.style.transform="translatey(20%)";
+        timerInterval = setTimeout(function () {
+          playAnimation()
+        }, 3000);
+        document.getElementById("playpause").classList.remove("play-circle");
+        document.getElementById("playpause").classList.add("pause-circle");
+      }
+      else if(document.getElementById("playpause").classList.contains("pause-circle")){    
+        vynlId.classList.remove("vynl-animation");
+        
+        myAudio.pause();
+        stopAnimation()
+        timerInterval = setTimeout(function () {
+          nowPlayingBoardId.style.transform="translatey(10%)";
+          // nowPlayingBoardBottomBarId.style.transform="translatey(0%)";
+        }, 1000);
+        
+        
+        document.getElementById("playpause").classList.remove("pause-circle");
+        document.getElementById("playpause").classList.add("play-circle");
+      }
+
+    }
 
 ///////////////////////////////////////////
 
