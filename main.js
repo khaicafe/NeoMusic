@@ -1,7 +1,8 @@
 const { app, BrowserWindow } = require('electron');
+// yarn make --arch=ia32
 // app.commandLine.appendSwitch('openssl-legacy-provider');
 const path = require('path');
-// khởi động cùng window
+// khởi động cùng window ds
 app.setLoginItemSettings({
   openAtLogin: true,
   // openAsHidden: true,
